@@ -2,12 +2,15 @@ package com.github.lltal.sarafanserver.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.List;
 
 @Data
 @AllArgsConstructor
+@NoArgsConstructor
 @Entity
 @Table(name = "chat", uniqueConstraints = {
         @UniqueConstraint(columnNames = "id")

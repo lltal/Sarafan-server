@@ -1,6 +1,7 @@
 package com.github.lltal.sarafanserver.controllers;
 
 import com.github.lltal.sarafanserver.domain.Chat;
+import com.github.lltal.sarafanserver.exceptions.ResourceNotFoundException;
 import com.github.lltal.sarafanserver.repo.ChatRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -23,12 +24,18 @@ public class ChatController {
         return chatRepo.findAll();
     }
 
-    @PostMapping("/{chatId}")
+    @GetMapping("/{chatId}")
+    public Chat getChatById(
+            @PathVariable("chatId") String chatId
+    ){
+        return chatRepo.findById(chatId).orElseThrow(() -> new ResourceNotFoundException("chat", "chatId", chatId));
+    }
+
+    @PostMapping
     public Chat postChat(
             @RequestBody Chat chat
     ) {
-        Optional<Chat> chatFromDb = chatRepo.findById(chatId);
-        return chatFromDb.orElseGet(() -> chatRepo.save(chat));
+        return chatRepo.save(chat);
     }
 
     @DeleteMapping("/{chatId}")
