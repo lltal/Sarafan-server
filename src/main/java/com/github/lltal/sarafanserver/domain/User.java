@@ -1,22 +1,17 @@
 package com.github.lltal.sarafanserver.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonView;
 import com.github.lltal.sarafanserver.enums.AuthProvider;
 
 
 import lombok.Data;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users", uniqueConstraints = {
@@ -26,18 +21,23 @@ import lombok.Data;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @JsonView(Views.Id.class)
     private Long id;
 
     @Column(nullable = false)
+    @JsonView(Views.FullMessage.class)
     private String name;
 
     @Email
     @Column(nullable = false)
+    @JsonView(Views.FullMessage.class)
     private String email;
 
+    @JsonView(Views.FullMessage.class)
     private String imageUrl;
 
     @Column(nullable = false)
+    @JsonView(Views.FullMessage.class)
     private Boolean emailVerified = false;
 
     @JsonIgnore
@@ -45,7 +45,13 @@ public class User {
 
     @NotNull
     @Enumerated(EnumType.STRING)
+    @JsonView(Views.FullMessage.class)
     private AuthProvider provider;
 
+    @JsonView(Views.FullMessage.class)
     private String providerId;
+
+    @ManyToMany(mappedBy = "users")
+    @JsonView(Views.FullMessage.class)
+    private List<Chat> chats;
 }

@@ -1,7 +1,9 @@
 package com.github.lltal.sarafanserver.domain;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonView;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -10,6 +12,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "id")
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -26,13 +31,13 @@ public class Message {
 
     @JsonView(Views.IdName.class)
     @ManyToOne
-    @JoinColumn(name = "chat_id", nullable = false)
-    private Chat chat;
-
-    @JsonView(Views.IdName.class)
-    @ManyToOne
     @JoinColumn(name = "user_id", updatable = false, nullable = false)
     private User user;
+
+    @JsonView(Views.FullMessage.class)
+    @ManyToOne
+    @JoinColumn(name = "chat_id", updatable = false, nullable = false)
+    private Chat chat;
 }
 
 

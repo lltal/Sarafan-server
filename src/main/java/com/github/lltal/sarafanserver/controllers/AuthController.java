@@ -1,5 +1,6 @@
 package com.github.lltal.sarafanserver.controllers;
 
+import com.github.lltal.sarafanserver.security.TokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -15,14 +16,13 @@ import java.net.URI;
 import javax.validation.Valid;
 
 import com.github.lltal.sarafanserver.domain.User;
-import com.github.lltal.sarafanserver.dto.ApiResponse;
-import com.github.lltal.sarafanserver.dto.AuthResponse;
-import com.github.lltal.sarafanserver.dto.LoginRequest;
-import com.github.lltal.sarafanserver.dto.SignUpRequest;
+import com.github.lltal.sarafanserver.dto.auth.ApiResponse;
+import com.github.lltal.sarafanserver.dto.auth.AuthResponse;
+import com.github.lltal.sarafanserver.dto.auth.LoginRequest;
+import com.github.lltal.sarafanserver.dto.auth.SignUpRequest;
 import com.github.lltal.sarafanserver.enums.AuthProvider;
 import com.github.lltal.sarafanserver.exceptions.BadRequestException;
 import com.github.lltal.sarafanserver.repo.UserRepo;
-import com.github.lltal.sarafanserver.security.TokenProvider;
 
 @RestController
 @RequestMapping("/auth")

@@ -32,6 +32,7 @@ public class ConsumerConfiguration {
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getBootstrapBroker());
         config.put(ConsumerConfig.GROUP_ID_CONFIG, properties.getGroupId());
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");
+        config.put(JsonDeserializer.TRUSTED_PACKAGES, "*");
         return config;
     }
 

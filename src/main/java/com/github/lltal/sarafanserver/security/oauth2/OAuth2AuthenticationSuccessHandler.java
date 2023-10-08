@@ -9,13 +9,13 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.github.lltal.sarafanserver.config.properties.AppProperties;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import com.github.lltal.sarafanserver.config.properties.AppProperties;
 import com.github.lltal.sarafanserver.exceptions.BadRequestException;
 import com.github.lltal.sarafanserver.security.TokenProvider;
 import com.github.lltal.sarafanserver.utils.CookieUtils;

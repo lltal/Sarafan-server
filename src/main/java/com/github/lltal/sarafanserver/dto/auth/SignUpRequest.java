@@ -1,13 +1,16 @@
-package com.github.lltal.sarafanserver.dto;
+package com.github.lltal.sarafanserver.dto.auth;
 
+
+import lombok.Data;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-import lombok.Data;
-
 @Data
-public class LoginRequest {
+public class SignUpRequest {
+    @NotBlank
+    private String name;
+
     @NotBlank
     @Email
     private String email;

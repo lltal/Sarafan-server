@@ -1,22 +1,27 @@
 package com.github.lltal.sarafanserver.controllers;
 
 import com.github.lltal.sarafanserver.domain.Chat;
+import com.github.lltal.sarafanserver.domain.User;
 import com.github.lltal.sarafanserver.exceptions.ResourceNotFoundException;
 import com.github.lltal.sarafanserver.repo.ChatRepo;
+import com.github.lltal.sarafanserver.repo.UserRepo;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import javax.transaction.Transactional;
+import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping(path = "/chats")
 public class ChatController {
 
     private final ChatRepo chatRepo;
+    private final UserRepo userRepo;
 
-    public ChatController(ChatRepo chatRepo) {
+    public ChatController(ChatRepo chatRepo, UserRepo userRepo) {
         this.chatRepo = chatRepo;
+        this.userRepo = userRepo;
     }
 
     @GetMapping
@@ -28,13 +33,28 @@ public class ChatController {
     public Chat getChatById(
             @PathVariable("chatId") String chatId
     ){
-        return chatRepo.findById(chatId).orElseThrow(() -> new ResourceNotFoundException("chat", "chatId", chatId));
+        return chatRepo
+                .findById(chatId)
+                .orElseThrow(() -> new ResourceNotFoundException("chat", "chatId", chatId));
     }
 
     @PostMapping
+    @Transactional
     public Chat postChat(
             @RequestBody Chat chat
     ) {
+        List<User> usersById = userRepo.findAllById(Arrays
+                .stream(chat
+                        .getId()
+                        .split("-"))
+                .map(Long::parseLong)
+                .toList());
+
+        usersById.forEach(user -> {
+            user.getChats().add(chat);
+            userRepo.save(user);
+        });
+
         return chatRepo.save(chat);
     }
 

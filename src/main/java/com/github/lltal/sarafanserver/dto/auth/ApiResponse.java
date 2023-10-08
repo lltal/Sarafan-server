@@ -1,4 +1,4 @@
-package com.github.lltal.sarafanserver.dto;
+package com.github.lltal.sarafanserver.dto.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
