@@ -16,6 +16,7 @@ public class STOMPDisconnectEventListener implements ApplicationListener<Session
     public void onApplicationEvent(SessionDisconnectEvent event) {
         StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
         String chatId = sha.getNativeHeader("chatId").get(0);
-        webAgentSessionRegistry.removeChat(chatId);
+        String sessionId = sha.getSessionId();
+        webAgentSessionRegistry.removeSession(chatId, sessionId);
     }
 }

@@ -17,10 +17,10 @@ public class STOMPConnectEventListener implements ApplicationListener<SessionCon
     public void onApplicationEvent(SessionConnectEvent event) {
         StompHeaderAccessor sha = StompHeaderAccessor.wrap(event.getMessage());
 
-        String agentId = sha.getNativeHeader("agentId").get(0);
         String chatId = sha.getNativeHeader("chatId").get(0);
+        String sessionId = sha.getSessionId();
 
         /** add new session to registry */
-        webAgentSessionRegistry.addChat(chatId, agentId);
+        webAgentSessionRegistry.addSession(chatId, sessionId);
     }
 }
