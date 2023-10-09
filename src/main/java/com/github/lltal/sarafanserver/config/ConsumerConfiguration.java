@@ -2,7 +2,8 @@ package com.github.lltal.sarafanserver.config;
 
 import com.github.lltal.sarafanserver.config.properties.KafkaProperties;
 import com.github.lltal.sarafanserver.consumers.MessageHandler;
-import com.github.lltal.sarafanserver.dto.MessageDto;
+import com.github.lltal.sarafanserver.dto.KafkaMessageDto;
+import com.github.lltal.sarafanserver.dto.WsMessageDto;
 import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -37,12 +38,12 @@ public class ConsumerConfiguration {
     }
 
     @Bean
-    public KafkaMessageListenerContainer<String, MessageDto> messageListener()
+    public KafkaMessageListenerContainer<String, KafkaMessageDto> messageListener()
     {
         ContainerProperties containerProperties = new ContainerProperties(properties.getTopic());
         containerProperties.setMessageListener(messageHandler);
-        DefaultKafkaConsumerFactory<String, MessageDto> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerConfig());
-        KafkaMessageListenerContainer<String, MessageDto> listenerContainer = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
+        DefaultKafkaConsumerFactory<String, KafkaMessageDto> consumerFactory = new DefaultKafkaConsumerFactory<>(consumerConfig());
+        KafkaMessageListenerContainer<String, KafkaMessageDto> listenerContainer = new KafkaMessageListenerContainer<>(consumerFactory, containerProperties);
         // bean name is prefix to kafka consumer thread name
         listenerContainer.setBeanName("kafka-message-listener");
         return listenerContainer;

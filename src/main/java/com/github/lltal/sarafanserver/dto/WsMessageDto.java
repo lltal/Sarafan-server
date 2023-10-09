@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageDto {
+public class WsMessageDto {
     private ObjectType objectType;
     private EventType eventType;
     @JsonRawValue

@@ -1,12 +1,11 @@
 package com.github.lltal.sarafanserver.config;
 
 import com.github.lltal.sarafanserver.config.properties.KafkaProperties;
-import com.github.lltal.sarafanserver.domain.Message;
-import com.github.lltal.sarafanserver.dto.MessageDto;
+import com.github.lltal.sarafanserver.dto.KafkaMessageDto;
+import com.github.lltal.sarafanserver.dto.WsMessageDto;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.common.serialization.StringSerializer;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.kafka.core.DefaultKafkaProducerFactory;
@@ -24,7 +23,7 @@ public class ProducerConfiguration {
     private KafkaProperties properties;
 
     @Bean
-    public ProducerFactory<String, MessageDto> producerFactory(){
+    public ProducerFactory<String, KafkaMessageDto> producerFactory(){
         return new DefaultKafkaProducerFactory<>(producerConfig());
     }
 
@@ -38,7 +37,7 @@ public class ProducerConfiguration {
     }
 
     @Bean
-    public KafkaTemplate<String, MessageDto> kafkaTemplate(){
+    public KafkaTemplate<String, KafkaMessageDto> kafkaTemplate(){
         return new KafkaTemplate<>(producerFactory());
     }
 }

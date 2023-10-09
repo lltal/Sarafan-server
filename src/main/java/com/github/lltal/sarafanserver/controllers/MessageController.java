@@ -9,6 +9,7 @@ import com.github.lltal.sarafanserver.domain.Views;
 import com.github.lltal.sarafanserver.dto.EventType;
 import com.github.lltal.sarafanserver.dto.ObjectType;
 import com.github.lltal.sarafanserver.exceptions.ResourceNotFoundException;
+import com.github.lltal.sarafanserver.ifc.TripleConsumer;
 import com.github.lltal.sarafanserver.repo.MessageRepo;
 import com.github.lltal.sarafanserver.repo.UserRepo;
 import com.github.lltal.sarafanserver.security.UserPrincipal;
@@ -32,8 +33,7 @@ public class MessageController
 
     private final UserRepo userRepo;
 
-    private final BiConsumer<EventType, Message> kafkaSender;
-
+    private final TripleConsumer<EventType, Message, String> kafkaSender;
 
     public MessageController(
             MessageRepo messageRepo,
@@ -73,18 +73,19 @@ public class MessageController
         message.setUser(user);
         message.setCreationDate(LocalDateTime.now());
         message.setChat(chat);
-        kafkaSender.accept(EventType.CREATE, message);
+        kafkaSender.accept(EventType.CREATE, message, chat.getId());
         return messageRepo.save(message);
     }
 
     @PutMapping("/{messageId}")
     @JsonView(Views.IdName.class)
     public Message putMessage(
+            @PathVariable("chatId") String chatId,
             @PathVariable("messageId") Message messageFromDb,
             @RequestBody Message message
     ){
         BeanUtils.copyProperties(message, messageFromDb, "id");
-        kafkaSender.accept(EventType.UPDATE, message);
+        kafkaSender.accept(EventType.UPDATE, message, chatId);
 
         return messageRepo.save(messageFromDb);
     }
@@ -92,8 +93,11 @@ public class MessageController
     @DeleteMapping("/{messageId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @JsonView(Views.IdName.class)
-    public void deleteMessage(@PathVariable("messageId") Message message){
-        kafkaSender.accept(EventType.REMOVE, message);
+    public void deleteMessage(
+            @PathVariable("chatId") String chatId,
+            @PathVariable("messageId") Message message
+    ){
+        kafkaSender.accept(EventType.REMOVE, message, chatId);
         messageRepo.delete(message);
     }
 }

@@ -51,8 +51,7 @@ public class ChatController {
                 .toList());
 
         usersById.forEach(user -> {
-            user.getChats().add(chat);
-            userRepo.save(user);
+            chat.getUsers().add(user);
         });
 
         return chatRepo.save(chat);
