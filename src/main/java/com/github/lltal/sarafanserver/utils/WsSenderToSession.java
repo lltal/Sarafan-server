@@ -32,13 +32,15 @@ public class WsSenderToSession {
             String value = null;
             try {
                 if (!(payload instanceof String))
-                    value = mapper.writeValueAsString(payload);
+                    value =  mapper.writerWithView(view).writeValueAsString(payload);
+                else
+                    value = (String) payload;
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
             log.info("receive T type={}", payload);
-            template.convertAndSend("", new WsMessageDto(objectType, eventType, value));
-            template.convertAndSendToUser(sessionId, "topic/private", new WsMessageDto(objectType, eventType, value));
+            template.convertAndSend("/topic/private-messages", new WsMessageDto(objectType, eventType, value));
+            //template.convertAndSendToUser(sessionId, "topic/private", new WsMessageDto(objectType, eventType, value));
         };
     }
 }

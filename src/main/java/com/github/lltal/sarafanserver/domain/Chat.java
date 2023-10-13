@@ -33,7 +33,7 @@ import java.util.List;
 public class Chat {
     @Id
     @Column(name = "id")
-    @JsonView(Views.IdName.class)
+    @JsonView(Views.Id.class)
     private String id;
 
     @JsonView(Views.IdName.class)

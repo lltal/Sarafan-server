@@ -1,6 +1,7 @@
 package com.github.lltal.sarafanserver.config;
 
 import com.github.lltal.sarafanserver.config.properties.KafkaProperties;
+import com.github.lltal.sarafanserver.consumers.CustomDeserializer;
 import com.github.lltal.sarafanserver.consumers.MessageHandler;
 import com.github.lltal.sarafanserver.dto.KafkaMessageDto;
 import com.github.lltal.sarafanserver.dto.WsMessageDto;
@@ -29,7 +30,7 @@ public class ConsumerConfiguration {
     private Map<String, Object> consumerConfig(){
         Map<String, Object> config = new HashMap<>();
         config.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class);
-        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, JsonDeserializer.class);
+        config.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, CustomDeserializer.class);
         config.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, properties.getBootstrapBroker());
         config.put(ConsumerConfig.GROUP_ID_CONFIG, properties.getGroupId());
         config.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "latest");

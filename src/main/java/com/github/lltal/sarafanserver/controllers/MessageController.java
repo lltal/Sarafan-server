@@ -7,6 +7,7 @@ import com.github.lltal.sarafanserver.domain.Message;
 import com.github.lltal.sarafanserver.domain.User;
 import com.github.lltal.sarafanserver.domain.Views;
 import com.github.lltal.sarafanserver.dto.EventType;
+import com.github.lltal.sarafanserver.dto.KafkaMessageDto;
 import com.github.lltal.sarafanserver.dto.ObjectType;
 import com.github.lltal.sarafanserver.exceptions.ResourceNotFoundException;
 import com.github.lltal.sarafanserver.ifc.TripleConsumer;
@@ -33,7 +34,7 @@ public class MessageController
 
     private final UserRepo userRepo;
 
-    private final TripleConsumer<EventType, Message, String> kafkaSender;
+    private final KafkaSender kafkaSender;
 
     public MessageController(
             MessageRepo messageRepo,
@@ -41,7 +42,7 @@ public class MessageController
     ) {
         this.messageRepo = messageRepo;
         this.userRepo = userRepo;
-        this.kafkaSender = sender.getKafkaSender(ObjectType.MESSAGE, Views.IdName.class);
+        this.kafkaSender = sender;
     }
 
     @GetMapping
@@ -73,7 +74,7 @@ public class MessageController
         message.setUser(user);
         message.setCreationDate(LocalDateTime.now());
         message.setChat(chat);
-        kafkaSender.accept(EventType.CREATE, message, chat.getId());
+        kafkaSender.sendMessage(ObjectType.MESSAGE, Views.IdName.class, EventType.CREATE, message, chat.getId());
         return messageRepo.save(message);
     }
 
@@ -85,7 +86,7 @@ public class MessageController
             @RequestBody Message message
     ){
         BeanUtils.copyProperties(message, messageFromDb, "id");
-        kafkaSender.accept(EventType.UPDATE, message, chatId);
+        kafkaSender.sendMessage(ObjectType.MESSAGE, Views.IdName.class, EventType.UPDATE, message, chatId);
 
         return messageRepo.save(messageFromDb);
     }
@@ -97,7 +98,7 @@ public class MessageController
             @PathVariable("chatId") String chatId,
             @PathVariable("messageId") Message message
     ){
-        kafkaSender.accept(EventType.REMOVE, message, chatId);
+        kafkaSender.sendMessage(ObjectType.MESSAGE, Views.IdName.class, EventType.REMOVE, message, chatId);
         messageRepo.delete(message);
     }
 }

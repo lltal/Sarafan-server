@@ -13,6 +13,5 @@ public class KafkaMessageDto {
     private ObjectType objectType;
     private EventType eventType;
     private String chatId;
-    @JsonRawValue
-    private Object payload;
+    private String payload;
 }

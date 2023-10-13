@@ -12,5 +12,5 @@ public class WsMessageDto {
     private ObjectType objectType;
     private EventType eventType;
     @JsonRawValue
-    private Object payload;
+    private String payload;
 }

@@ -39,11 +39,11 @@ public class MessageHandler implements MessageListener<String, KafkaMessageDto> 
                     .forEach(sessionId -> {
                         wsSender.accept(
                                 messageRecord.value().getEventType(),
-                                messageRecord.value(),
+                                messageRecord.value().getPayload(),
                                 sessionId);
                     });
         } catch (Exception e) {
-            log.info("Exception in MessageHandler={}", e.getStackTrace());
+            log.info("Exception in MessageHandler={}", (Object)e.getStackTrace());
         }
 
     }
