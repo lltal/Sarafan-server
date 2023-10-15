@@ -28,7 +28,7 @@ public class WsSenderToSession {
         mapper
                 .setConfig(mapper.getSerializationConfig())
                 .writerWithView(view);
-        return (EventType eventType, T payload, String sessionId) -> {
+        return (EventType eventType, T payload, String chatId) -> {
             String value = null;
             try {
                 if (!(payload instanceof String))
@@ -38,9 +38,8 @@ public class WsSenderToSession {
             } catch (JsonProcessingException e) {
                 throw new RuntimeException(e);
             }
-            log.info("receive T type={}", payload);
-            template.convertAndSend("/topic/private-messages", new WsMessageDto(objectType, eventType, value));
-            //template.convertAndSendToUser(sessionId, "topic/private", new WsMessageDto(objectType, eventType, value));
+            log.info("receive T={}", payload);
+            template.convertAndSendToUser(chatId, "/private-messages", new WsMessageDto(objectType, eventType, value));
         };
     }
 }
