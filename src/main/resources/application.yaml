@@ -41,5 +41,5 @@ app:
       - http://localhost:3000/oauth2/redirect
   kafka:
     topic: sarafan
-    bootstrap_broker: localhost:9092
+    bootstrap_broker: localhost:9093
     group_id: sand-box

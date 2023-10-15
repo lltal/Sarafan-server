@@ -1,7 +1,9 @@
 package com.github.lltal.sarafanserver.controllers;
 
+import com.fasterxml.jackson.annotation.JsonView;
 import com.github.lltal.sarafanserver.domain.Chat;
 import com.github.lltal.sarafanserver.domain.User;
+import com.github.lltal.sarafanserver.domain.Views;
 import com.github.lltal.sarafanserver.exceptions.ResourceNotFoundException;
 import com.github.lltal.sarafanserver.repo.ChatRepo;
 import com.github.lltal.sarafanserver.repo.UserRepo;
@@ -30,6 +32,7 @@ public class ChatController {
     }
 
     @GetMapping("/{chatId}")
+    @JsonView(Views.IdName.class)
     public Chat getChatById(
             @PathVariable("chatId") String chatId
     ){
