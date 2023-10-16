@@ -16,10 +16,5 @@ public interface ChatRepo extends JpaRepository<Chat, String> {
     @EntityGraph(value = "Chat.detail", type = EntityGraph.EntityGraphType.LOAD)
     List<Chat> findAll();
 
-    @Override
-    @Query(value = "select * from chat" +
-            " left outer join message on" +
-            " message.chat_id = chat.id" +
-            " where chat.id = :chatId", nativeQuery = true)
     Optional<Chat> findById(@Param("chatId") String chatId);
 }

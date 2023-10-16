@@ -15,6 +15,7 @@ import java.time.LocalDateTime;
 @JsonIdentityInfo(
         generator = ObjectIdGenerators.PropertyGenerator.class,
         property = "id")
+// TODO: add chatId in message primary key
 public class Message {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
