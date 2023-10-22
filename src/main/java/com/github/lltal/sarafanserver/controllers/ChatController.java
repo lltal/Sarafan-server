@@ -1,12 +1,14 @@
 package com.github.lltal.sarafanserver.controllers;
 
 import com.fasterxml.jackson.annotation.JsonView;
+import com.github.lltal.sarafanserver.annotations.CurrentUser;
 import com.github.lltal.sarafanserver.domain.Chat;
 import com.github.lltal.sarafanserver.domain.User;
 import com.github.lltal.sarafanserver.domain.Views;
 import com.github.lltal.sarafanserver.exceptions.ResourceNotFoundException;
 import com.github.lltal.sarafanserver.repo.ChatRepo;
 import com.github.lltal.sarafanserver.repo.UserRepo;
+import com.github.lltal.sarafanserver.security.UserPrincipal;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -27,8 +29,9 @@ public class ChatController {
     }
 
     @GetMapping
-    public List<Chat> getChats(){
-        return chatRepo.findAll();
+    @JsonView(Views.IdName.class)
+    public List<Chat> getChats(@CurrentUser UserPrincipal principal){
+        return chatRepo.findAllByUserId(principal.getId());
     }
 
     @GetMapping("/{chatId}")
@@ -42,7 +45,7 @@ public class ChatController {
     }
 
     @PostMapping
-    @Transactional
+    @JsonView(Views.IdName.class)
     public Chat postChat(
             @RequestBody Chat chat
     ) {

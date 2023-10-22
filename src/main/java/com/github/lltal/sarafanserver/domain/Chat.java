@@ -12,7 +12,9 @@ import org.springframework.stereotype.Component;
 
 import javax.persistence.*;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Data
 @AllArgsConstructor
@@ -36,16 +38,16 @@ public class Chat {
     @JsonView(Views.Id.class)
     private String id;
 
-    @JsonView(Views.IdName.class)
-    @OneToMany(mappedBy = "chat")
-    private List<Message> messages;
-
     @ManyToMany
     @JoinTable(
             name = "chat_user",
             joinColumns = @JoinColumn(name = "chat_id"),
             inverseJoinColumns = @JoinColumn(name = "user_id")
     )
-    @JsonView(Views.FullMessage.class)
-    private List<User> users = new ArrayList<>();
+    @JsonView(Views.IdName.class)
+    private Set<User> users = new HashSet<>();
+
+    @JsonView(Views.IdName.class)
+    @OneToMany(mappedBy = "chat")
+    private List<Message> messages;
 }

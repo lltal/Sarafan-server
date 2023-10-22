@@ -25,16 +25,16 @@ public class User {
     private Long id;
 
     @Column(nullable = false)
-    @JsonView(Views.FullMessage.class)
+    @JsonView(Views.IdName.class)
     private String name;
+
+    @JsonView(Views.IdName.class)
+    private String imageUrl;
 
     @Email
     @Column(nullable = false)
     @JsonView(Views.FullMessage.class)
     private String email;
-
-    @JsonView(Views.FullMessage.class)
-    private String imageUrl;
 
     @Column(nullable = false)
     @JsonView(Views.FullMessage.class)
